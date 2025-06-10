@@ -40,4 +40,17 @@ public record Result(boolean valid, String field, List<String> reasons) {
 		return validate(concat(first, second));
 	}
 
+	public static void check(List<Result> results) {
+		Map<String, List<String>> reasons = validate(results);
+		if (!reasons.isEmpty()) {
+			throw new IllegalArgumentException(reasons.toString());
+		}
+	}
+	public static void check(Result... results) {
+		check(Arrays.asList(results));
+	}
+	public static void check(List<Result> first, List<Result> second) {
+		check(concat(first, second));
+	}
+
 }
