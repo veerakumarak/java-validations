@@ -28,16 +28,16 @@ public record Result(boolean valid, String field, List<String> reasons) {
 		return Stream.concat(first.stream(), second.stream()).toList();
 	}
 
-	public static Map<String, List<String>> check(List<Result> results) {
+	public static Map<String, List<String>> validate(List<Result> results) {
 		 return results.stream()
 				.filter(result -> !result.valid())
 				.collect(Collectors.toMap(Result::field, Result::reasons));
 	}
-	public static Map<String, List<String>> check(Result... results) {
-		return check(Arrays.asList(results));
+	public static Map<String, List<String>> validate(Result... results) {
+		return validate(Arrays.asList(results));
 	}
-	public static Map<String, List<String>> check(List<Result> first, List<Result> second) {
-		return check(concat(first, second));
+	public static Map<String, List<String>> validate(List<Result> first, List<Result> second) {
+		return validate(concat(first, second));
 	}
 
 }
