@@ -1,6 +1,8 @@
 package io.github.veerakumarak.validations;
 
-import io.github.veerakumarak.fp.errors.InvalidRequest;
+import io.github.veerakumarak.fp.Failure;
+import io.github.veerakumarak.fp.Failures;
+import io.github.veerakumarak.fp.failures.InvalidRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,10 @@ public record Reasons(Map<String, List<String>> reasons) {
 
     public void orThrow() {
         throw new InvalidRequest(reasons);
+    }
+
+    public Failure toFailure() {
+        return !isValid() ? (Failure)new InvalidRequest(reasons) : Failures.empty();
     }
 
     public Map<String, List<String>> reasons() {

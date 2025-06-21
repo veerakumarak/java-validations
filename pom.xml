@@ -43,7 +43,7 @@
     <dependency>
       <groupId>io.github.veerakumarak</groupId>
       <artifactId>fp</artifactId>
-      <version>3.2.0</version>
+      <version>5.0.0</version>
     </dependency>
 
     <dependency>
