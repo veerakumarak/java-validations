@@ -16,12 +16,4 @@ public record FieldResult(boolean valid, String field, List<String> reasons) {
 		return new FieldResult(false, field, reasons);
 	}
 
-//	public FieldResult and(FieldResult other){
-//		return new FieldResult(
-//				valid && other.valid,
-//				field,
-//				Stream.concat(this.reasons.stream(), other.reasons.stream()).toList()
-//		);
-//	}
-
 }

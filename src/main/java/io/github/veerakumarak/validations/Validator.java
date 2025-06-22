@@ -2,7 +2,6 @@ package io.github.veerakumarak.validations;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 public final class Validator {
 
@@ -10,26 +9,25 @@ public final class Validator {
 		throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
 	}
 
-	public static Reasons validate(List<IRule> rules) {
-		Objects.requireNonNull(rules, "Rules list cannot be null.");
-		return Reasons.of(rules.stream().map(IRule::validate).toList());
+	public static ValidationResult allValid(List<FieldResult> fieldResults) {
+		Objects.requireNonNull(fieldResults, "Results list cannot be null.");
+		return ValidationResult.of(fieldResults);
 	}
 
-	public static Reasons validate(IRule... rules) {
-		Objects.requireNonNull(rules, "Rules list cannot be null.");
-		return validate(List.of(rules));
+	public static ValidationResult allValid(FieldResult... fieldResults) {
+		return allValid(List.of(fieldResults));
 	}
 
-	public static Reasons validate(List<IRule> first, IRule... second) {
-		Objects.requireNonNull(first, "First Rules list cannot be null.");
-		Objects.requireNonNull(second, "Second Rules list cannot be null.");
-		return validate(first, List.of(second));
+	public static ValidationResult anyValid(List<FieldResult> fieldResults) {
+		Objects.requireNonNull(fieldResults, "Results list cannot be null.");
+		if (!fieldResults.isEmpty() && fieldResults.stream().anyMatch(FieldResult::valid)) {
+			return ValidationResult.of(List.of());
+		}
+		return ValidationResult.of(fieldResults);
 	}
 
-	public static Reasons validate(List<IRule> first, List<IRule> second) {
-		Objects.requireNonNull(first, "First Rules list cannot be null.");
-		Objects.requireNonNull(second, "Second Rules list cannot be null.");
-		return validate(Stream.concat(first.stream(), second.stream()).toList());
+	public static ValidationResult anyValid(FieldResult... fieldResults) {
+		return anyValid(List.of(fieldResults));
 	}
 
 }

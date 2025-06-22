@@ -27,11 +27,11 @@ public class ListFieldValidator<K> extends FieldValidator<List<K>> {
 	}
 
 	public ListFieldValidator<K> moreThan(int size){
-		return (ListFieldValidator<K>) this.add((l) -> l.size() >= size, Terminate.NONE, ErrorOn.FAILURE, format("must have more than %s size.", size));
+		return (ListFieldValidator<K>) this.add((l) -> l.size() >= size, Terminate.NONE, ErrorOn.FAILURE, format("must have more than %s size", size));
 	}
 	
 	public ListFieldValidator<K> lessThan(int size){
-		return (ListFieldValidator<K>) this.add((l) -> l.size() <= size, Terminate.NONE, ErrorOn.FAILURE, format("must have less than %s size.", size));
+		return (ListFieldValidator<K>) this.add((l) -> l.size() <= size, Terminate.NONE, ErrorOn.FAILURE, format("must have less than %s size", size));
 	}
 	
 	public ListFieldValidator<K> between(int minSize, int maxSize){
@@ -54,7 +54,7 @@ public class ListFieldValidator<K> extends FieldValidator<List<K>> {
 		return (ListFieldValidator<K>) this.add(l -> l.equals(list), Terminate.NONE, ErrorOn.FAILURE, format("must be equal to %s", list));
 	}
 
-	public ListFieldValidator<K> notEquals(List<String> list){
+	public ListFieldValidator<K> notEquals(List<K> list){
 		return (ListFieldValidator<K>) this.add(l -> !l.equals(list), Terminate.NONE, ErrorOn.FAILURE, format("must be not equal to %s", list));
 	}
 

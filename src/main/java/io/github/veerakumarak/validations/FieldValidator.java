@@ -24,6 +24,7 @@ public class FieldValidator<K> implements IValidation<K> {
 		this.add(predicate, terminate, errorOn, onErrorMessage);
 	}
 
+	@Override
 	public FieldResult validate(String field, K param) {
 		List<String> reasons = new ArrayList<>();
 		boolean hasFailures = false;
@@ -49,8 +50,4 @@ public class FieldValidator<K> implements IValidation<K> {
 		return hasFailures ? FieldResult.fail(field, reasons) : FieldResult.ok(field);
 	}
 
-	@Override
-	public IRule check(String field, K param) {
-		return () -> this.validate(field, param);
-	}
 }

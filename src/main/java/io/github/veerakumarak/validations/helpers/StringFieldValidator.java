@@ -25,19 +25,19 @@ public class StringFieldValidator extends FieldValidator<String> {
 	}
 
 	public static StringFieldValidator optional() {
-		return new StringFieldValidator(s -> true, Terminate.NONE, ErrorOn.NONE, "");
+		return new StringFieldValidator(Objects::isNull, Terminate.SUCCESS, ErrorOn.NONE, "");
 	}
 
-	public StringFieldValidator minSize(int size){
+	public StringFieldValidator minLength(int size){
 		return (StringFieldValidator) this.add((s) -> s.length() >= size, Terminate.NONE, ErrorOn.FAILURE, format("should have at least %s characters", size));
 	}
 	
-	public StringFieldValidator maxSize(int size){
+	public StringFieldValidator maxLength(int size){
 		return (StringFieldValidator) this.add((s) -> s.length() <= size, Terminate.NONE, ErrorOn.FAILURE, format("should not exceed %s characters", size));
 	}
 	
-	public StringFieldValidator between(int minSize, int maxSize){
-		return minSize(minSize).maxSize(maxSize);
+	public StringFieldValidator lengthBetween(int minSize, int maxSize){
+		return minLength(minSize).maxLength(maxSize);
 	}
 	
 	public StringFieldValidator contains(String subString){
@@ -60,7 +60,7 @@ public class StringFieldValidator extends FieldValidator<String> {
 		return (StringFieldValidator) this.add((s) -> !s.isEmpty(), Terminate.NONE, ErrorOn.FAILURE, "should not be empty");
 	}
 
-	public StringFieldValidator regex(String regex){
+	public StringFieldValidator matchesRegex(String regex){
 		return (StringFieldValidator) this.add((s) -> s == null || s.matches(regex), Terminate.NONE, ErrorOn.FAILURE, format("must match regex %s", regex));
 	}
 

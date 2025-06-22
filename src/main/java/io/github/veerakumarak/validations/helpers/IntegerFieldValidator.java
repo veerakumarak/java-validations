@@ -17,23 +17,23 @@ public class IntegerFieldValidator extends FieldValidator<Integer> {
 	}
 
 	public static IntegerFieldValidator nonNull() {
-		return new IntegerFieldValidator(Objects::nonNull, Terminate.FAILURE, ErrorOn.FAILURE, "integer value must be non null");
+		return new IntegerFieldValidator(Objects::nonNull, Terminate.FAILURE, ErrorOn.FAILURE, "should not be null");
 	}
 
 	public static IValidation<Integer> isNull() {
-		return new IntegerFieldValidator(Objects::isNull, Terminate.FAILURE, ErrorOn.FAILURE, "must be null");
+		return new IntegerFieldValidator(Objects::isNull, Terminate.FAILURE, ErrorOn.FAILURE, "should be null");
 	}
 
 	public static IntegerFieldValidator optional() {
-		return new IntegerFieldValidator(Objects::nonNull, Terminate.FAILURE, ErrorOn.NONE, "");
+		return new IntegerFieldValidator(Objects::isNull, Terminate.SUCCESS, ErrorOn.NONE, "");
 	}
 
 	public IntegerFieldValidator lowerThan(int max){
-		return (IntegerFieldValidator) this.add((i) -> i < max, Terminate.NONE, ErrorOn.FAILURE, format("must be lower than %s.", max));
+		return (IntegerFieldValidator) this.add((i) -> i < max, Terminate.NONE, ErrorOn.FAILURE, format("should be lower than %s", max));
     }
 	
 	public IntegerFieldValidator greaterThan(int min){
-		return (IntegerFieldValidator) this.add((i) -> i > min, Terminate.NONE, ErrorOn.FAILURE, format("must be greather than %s.", min));
+		return (IntegerFieldValidator) this.add((i) -> i > min, Terminate.NONE, ErrorOn.FAILURE, format("should be greater than %s", min));
 	}
 
 	public IntegerFieldValidator between(int min, int max){
@@ -41,11 +41,11 @@ public class IntegerFieldValidator extends FieldValidator<Integer> {
 	}
 
 	public IntegerFieldValidator equals(int value){
-		return (IntegerFieldValidator) this.add((i) -> i == value, Terminate.NONE, ErrorOn.FAILURE, format("must be equal to %s.", value));
+		return (IntegerFieldValidator) this.add((i) -> i == value, Terminate.NONE, ErrorOn.FAILURE, format("should be equal to %s", value));
 	}
 
 	public IntegerFieldValidator notEquals(int value){
-		return (IntegerFieldValidator) this.add((i) -> i != value, Terminate.NONE, ErrorOn.FAILURE, format("must be not equal to %s.", value));
+		return (IntegerFieldValidator) this.add((i) -> i != value, Terminate.NONE, ErrorOn.FAILURE, format("should not be equal to %s", value));
 	}
 
 }
