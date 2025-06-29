@@ -40,7 +40,9 @@ public record ValidationResult(boolean valid, Map<String, List<String>> reasons)
     }
 
     public void orThrow() {
-        throw new InvalidRequest(reasons);
+        if (!isValid()) {
+            throw new InvalidRequest(reasons);
+        }
     }
 
     public Failure toFailure() {
