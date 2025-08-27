@@ -16,6 +16,10 @@ public class StringFieldValidator extends FieldValidator<String> {
 		super(predicate, terminate, errorOn, onErrorMessage);
 	}
 
+	private StringFieldValidator(StringFieldValidator other, Predicate<String> predicate, Terminate terminate, ErrorOn errorOn, String onErrorMessage) {
+		super(other, predicate, terminate, errorOn, onErrorMessage);
+	}
+
 	public static StringFieldValidator nonNull() {
 		return new StringFieldValidator(Objects::nonNull, Terminate.FAILURE, ErrorOn.FAILURE, "should not be null");
 	}
@@ -29,11 +33,11 @@ public class StringFieldValidator extends FieldValidator<String> {
 	}
 
 	public StringFieldValidator minLength(int size){
-		return (StringFieldValidator) this.add((s) -> s.length() >= size, Terminate.NONE, ErrorOn.FAILURE, format("should have at least %s characters", size));
+		return new StringFieldValidator(this, (s) -> s.length() >= size, Terminate.NONE, ErrorOn.FAILURE, format("should have at least %s characters", size));
 	}
 	
 	public StringFieldValidator maxLength(int size){
-		return (StringFieldValidator) this.add((s) -> s.length() <= size, Terminate.NONE, ErrorOn.FAILURE, format("should not exceed %s characters", size));
+		return new StringFieldValidator(this, (s) -> s.length() <= size, Terminate.NONE, ErrorOn.FAILURE, format("should not exceed %s characters", size));
 	}
 	
 	public StringFieldValidator lengthBetween(int minSize, int maxSize){
@@ -41,27 +45,27 @@ public class StringFieldValidator extends FieldValidator<String> {
 	}
 	
 	public StringFieldValidator contains(String subString){
-		return (StringFieldValidator) this.add((s) -> s.contains(subString), Terminate.NONE, ErrorOn.FAILURE, format("should contain %s", subString));
+		return new StringFieldValidator(this, (s) -> s.contains(subString), Terminate.NONE, ErrorOn.FAILURE, format("should contain %s", subString));
 	}
 
 	public StringFieldValidator equals(String value){
-		return (StringFieldValidator) this.add((s) -> s.equals(value), Terminate.NONE, ErrorOn.FAILURE, format("should be equal to %s", value));
+		return new StringFieldValidator(this, (s) -> s.equals(value), Terminate.NONE, ErrorOn.FAILURE, format("should be equal to %s", value));
 	}
 
 	public StringFieldValidator notEquals(String value){
-		return (StringFieldValidator) this.add((s) -> !s.equals(value), Terminate.NONE, ErrorOn.FAILURE, format("should not be equal to %s", value));
+		return new StringFieldValidator(this, (s) -> !s.equals(value), Terminate.NONE, ErrorOn.FAILURE, format("should not be equal to %s", value));
 	}
 
 	public StringFieldValidator isEmpty(){
-		return (StringFieldValidator) this.add(String::isEmpty, Terminate.NONE, ErrorOn.FAILURE, "should be empty");
+		return new StringFieldValidator(this, String::isEmpty, Terminate.NONE, ErrorOn.FAILURE, "should be empty");
 	}
 
 	public StringFieldValidator notEmpty(){
-		return (StringFieldValidator) this.add((s) -> !s.isEmpty(), Terminate.NONE, ErrorOn.FAILURE, "should not be empty");
+		return new StringFieldValidator(this, (s) -> !s.isEmpty(), Terminate.NONE, ErrorOn.FAILURE, "should not be empty");
 	}
 
 	public StringFieldValidator matchesRegex(String regex){
-		return (StringFieldValidator) this.add((s) -> s == null || s.matches(regex), Terminate.NONE, ErrorOn.FAILURE, format("must match regex %s", regex));
+		return new StringFieldValidator(this, (s) -> s == null || s.matches(regex), Terminate.NONE, ErrorOn.FAILURE, format("must match regex %s", regex));
 	}
 
 }

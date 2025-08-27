@@ -18,7 +18,11 @@ public class ListFieldValidator<K> extends FieldValidator<List<K>> {
 		super(predicate, terminate, errorOn, onErrorMessage);
 	}
 
-	public static <K> ListFieldValidator<K> nonNull() {
+    private ListFieldValidator(ListFieldValidator<K> other, Predicate<List<K>> predicate, Terminate terminate, ErrorOn errorOn, String onErrorMessage) {
+        super(other, predicate, terminate, errorOn, onErrorMessage);
+    }
+
+    public static <K> ListFieldValidator<K> nonNull() {
 		return new ListFieldValidator<>(Objects::nonNull, Terminate.FAILURE, ErrorOn.FAILURE, "list must be non null");
 	}
 
@@ -27,11 +31,11 @@ public class ListFieldValidator<K> extends FieldValidator<List<K>> {
 	}
 
 	public ListFieldValidator<K> moreThan(int size){
-		return (ListFieldValidator<K>) this.add((l) -> l.size() >= size, Terminate.NONE, ErrorOn.FAILURE, format("must have more than %s size", size));
+		return new ListFieldValidator<K>(this, (l) -> l.size() >= size, Terminate.NONE, ErrorOn.FAILURE, format("must have more than %s size", size));
 	}
 	
 	public ListFieldValidator<K> lessThan(int size){
-		return (ListFieldValidator<K>) this.add((l) -> l.size() <= size, Terminate.NONE, ErrorOn.FAILURE, format("must have less than %s size", size));
+		return new ListFieldValidator<K>(this, (l) -> l.size() <= size, Terminate.NONE, ErrorOn.FAILURE, format("must have less than %s size", size));
 	}
 	
 	public ListFieldValidator<K> between(int minSize, int maxSize){
@@ -39,31 +43,31 @@ public class ListFieldValidator<K> extends FieldValidator<List<K>> {
 	}
 
 	public ListFieldValidator<K> contains(K item){
-		return (ListFieldValidator<K>) this.add(l -> l.contains(item), Terminate.NONE, ErrorOn.FAILURE, format("must contain %s", item));
+		return new ListFieldValidator<K>(this, l -> l.contains(item), Terminate.NONE, ErrorOn.FAILURE, format("must contain %s", item));
 	}
 
 	public ListFieldValidator<K> containsAll(List<K> list){
-		return (ListFieldValidator<K>) this.add(l -> new HashSet<>(l).containsAll(list), Terminate.NONE, ErrorOn.FAILURE, format("must contain all of %s", list));
+		return new ListFieldValidator<K>(this, l -> new HashSet<>(l).containsAll(list), Terminate.NONE, ErrorOn.FAILURE, format("must contain all of %s", list));
 	}
 
 	public ListFieldValidator<K> notContains(K item){
-		return (ListFieldValidator<K>) this.add(l -> !l.contains(item), Terminate.NONE, ErrorOn.FAILURE, format("must contain %s", item));
+		return new ListFieldValidator<K>(this, l -> !l.contains(item), Terminate.NONE, ErrorOn.FAILURE, format("must contain %s", item));
 	}
 
 	public ListFieldValidator<K> equals(List<K> list){
-		return (ListFieldValidator<K>) this.add(l -> l.equals(list), Terminate.NONE, ErrorOn.FAILURE, format("must be equal to %s", list));
+		return new ListFieldValidator<K>(this, l -> l.equals(list), Terminate.NONE, ErrorOn.FAILURE, format("must be equal to %s", list));
 	}
 
 	public ListFieldValidator<K> notEquals(List<K> list){
-		return (ListFieldValidator<K>) this.add(l -> !l.equals(list), Terminate.NONE, ErrorOn.FAILURE, format("must be not equal to %s", list));
+		return new ListFieldValidator<K>(this, l -> !l.equals(list), Terminate.NONE, ErrorOn.FAILURE, format("must be not equal to %s", list));
 	}
 
 	public ListFieldValidator<K> isEmpty(){
-		return (ListFieldValidator<K>) this.add(List::isEmpty, Terminate.NONE, ErrorOn.FAILURE, "must be empty");
+		return new ListFieldValidator<K>(this, List::isEmpty, Terminate.NONE, ErrorOn.FAILURE, "must be empty");
 	}
 
 	public ListFieldValidator<K> notEmpty(){
-		return (ListFieldValidator<K>) this.add(l -> !l.isEmpty(), Terminate.NONE, ErrorOn.FAILURE, "must be empty");
+		return new ListFieldValidator<K>(this, l -> !l.isEmpty(), Terminate.NONE, ErrorOn.FAILURE, "must be empty");
 	}
 
 }

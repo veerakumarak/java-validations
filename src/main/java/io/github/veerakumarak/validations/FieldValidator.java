@@ -3,6 +3,7 @@ package io.github.veerakumarak.validations;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 // != null && val > 30
 // == null
@@ -14,15 +15,12 @@ public class FieldValidator<K> implements IValidation<K> {
 	private record Val<L>(Predicate<L> predicate, Terminate terminate, ErrorOn errorOn, String onErrorMessage) {
 	}
 
-	protected FieldValidator<K> add(Predicate<K> predicate, Terminate terminate, ErrorOn errorOn, String onErrorMessage) {
-		this.vals.add(new Val<>(predicate, terminate, errorOn, onErrorMessage));
-		return this;
+    protected FieldValidator(Predicate<K> predicate, Terminate terminate, ErrorOn errorOn, String onErrorMessage) {
+		this.vals = List.of(new Val<>(predicate, terminate, errorOn, onErrorMessage));
 	}
-
-	protected FieldValidator(Predicate<K> predicate, Terminate terminate, ErrorOn errorOn, String onErrorMessage) {
-		this.vals = new ArrayList<>();
-		this.add(predicate, terminate, errorOn, onErrorMessage);
-	}
+    protected FieldValidator(FieldValidator<K> other, Predicate<K> predicate, Terminate terminate, ErrorOn errorOn, String onErrorMessage) {
+        this.vals = Stream.concat(other.vals.stream(), Stream.of(new Val<>(predicate, terminate, errorOn, onErrorMessage))).toList();
+    }
 
 	@Override
 	public FieldResult validate(String field, K param) {

@@ -16,7 +16,11 @@ public class IntegerFieldValidator extends FieldValidator<Integer> {
 		super(predicate, terminate, errorOn, onErrorMessage);
 	}
 
-	public static IntegerFieldValidator nonNull() {
+    private IntegerFieldValidator(IntegerFieldValidator other, Predicate<Integer> predicate, Terminate terminate, ErrorOn errorOn, String onErrorMessage) {
+        super(other, predicate, terminate, errorOn, onErrorMessage);
+    }
+
+    public static IntegerFieldValidator nonNull() {
 		return new IntegerFieldValidator(Objects::nonNull, Terminate.FAILURE, ErrorOn.FAILURE, "should not be null");
 	}
 
@@ -29,11 +33,11 @@ public class IntegerFieldValidator extends FieldValidator<Integer> {
 	}
 
 	public IntegerFieldValidator lowerThan(int max){
-		return (IntegerFieldValidator) this.add((i) -> i < max, Terminate.NONE, ErrorOn.FAILURE, format("should be lower than %s", max));
+		return new IntegerFieldValidator(this, (i) -> i < max, Terminate.NONE, ErrorOn.FAILURE, format("should be lower than %s", max));
     }
 	
 	public IntegerFieldValidator greaterThan(int min){
-		return (IntegerFieldValidator) this.add((i) -> i > min, Terminate.NONE, ErrorOn.FAILURE, format("should be greater than %s", min));
+		return new IntegerFieldValidator(this, (i) -> i > min, Terminate.NONE, ErrorOn.FAILURE, format("should be greater than %s", min));
 	}
 
 	public IntegerFieldValidator between(int min, int max){
@@ -41,11 +45,11 @@ public class IntegerFieldValidator extends FieldValidator<Integer> {
 	}
 
 	public IntegerFieldValidator equals(int value){
-		return (IntegerFieldValidator) this.add((i) -> i == value, Terminate.NONE, ErrorOn.FAILURE, format("should be equal to %s", value));
+		return new IntegerFieldValidator(this, (i) -> i == value, Terminate.NONE, ErrorOn.FAILURE, format("should be equal to %s", value));
 	}
 
 	public IntegerFieldValidator notEquals(int value){
-		return (IntegerFieldValidator) this.add((i) -> i != value, Terminate.NONE, ErrorOn.FAILURE, format("should not be equal to %s", value));
+		return new IntegerFieldValidator(this, (i) -> i != value, Terminate.NONE, ErrorOn.FAILURE, format("should not be equal to %s", value));
 	}
 
 }
